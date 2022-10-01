@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://bmb6l787d0b5h"
+path="res://.godot/imported/bell.obj-343075226a271c821f4b6dbc2aa3cb77.mesh"
+
+[deps]
+
+files=["res://.godot/imported/bell.obj-343075226a271c821f4b6dbc2aa3cb77.mesh"]
+
+source_file="res://models/pieces/bell.obj"
+dest_files=["res://.godot/imported/bell.obj-343075226a271c821f4b6dbc2aa3cb77.mesh", "res://.godot/imported/bell.obj-343075226a271c821f4b6dbc2aa3cb77.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

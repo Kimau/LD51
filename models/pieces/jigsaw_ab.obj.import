@@ -1,0 +1,21 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://bqnoh5c6jnjeg"
+path="res://.godot/imported/jigsaw_ab.obj-4b37fbc12363f2f61f122b061e0cc332.mesh"
+
+[deps]
+
+files=["res://.godot/imported/jigsaw_ab.obj-4b37fbc12363f2f61f122b061e0cc332.mesh"]
+
+source_file="res://models/pieces/jigsaw_ab.obj"
+dest_files=["res://.godot/imported/jigsaw_ab.obj-4b37fbc12363f2f61f122b061e0cc332.mesh", "res://.godot/imported/jigsaw_ab.obj-4b37fbc12363f2f61f122b061e0cc332.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true

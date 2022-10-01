@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://clx4pxn8qj170"]
+
+[resource]
+metallic = 0.12
+metallic_specular = 0.77
+roughness = 0.69
+subsurf_scatter_strength = 0.62
+grow_amount = -0.15
