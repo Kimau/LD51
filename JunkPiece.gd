@@ -26,23 +26,17 @@ func _ready():
 	pass # Replace with function body.
 	
 func regen():
-	var ptIdx : int = self.pieceType
-	if ptIdx < 1:
-		ptIdx = 0
-	data.regen(ptIdx)
+	data.regen(pieceType)
 	colorCached = data.getColorCached()
 
 func _mouse_enter():
 	mouseTime = Time.get_ticks_msec()
-	can_sleep = false
 	sleeping = false
 	Engine.set_meta("LastTouched", self)
 
 func _mouse_exit():
 	if self.freeze:
 		pass
-	else:
-		can_sleep = true
 	if self == Engine.get_meta("LastTouched"):
 		Engine.set_meta("LastTouched", null)
 

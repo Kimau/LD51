@@ -70,8 +70,8 @@ static func rollLetter(ld : Dictionary):
 	#end for
 	return lRes
 	
-func regen(pt : GlobalEnum.PieceType):
-	shapeType = pt
+func regen(pt):
+	shapeType = pt if pt else 0
 	var globalCD : Dictionary = Engine.get_meta("ColDict", {})
 	colorIdx = rollColor(numCols, globalCD)
 	Engine.set_meta("ColDict", globalCD)
@@ -84,7 +84,7 @@ func regen(pt : GlobalEnum.PieceType):
 		GlobalEnum.PieceType.Jigsaw:
 			pass
 	
-	print("REGEN ", shapeType, " - ", colorIdx)
+	#print("REGEN ", shapeType, " - ", colorIdx)
 	
 	
 func getColorCached():

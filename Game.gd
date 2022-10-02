@@ -9,6 +9,7 @@ var grabRot : Vector3
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	$JunkSrc.dumpJunk(10)
 	pass # Replace with function body.
 
 
@@ -80,7 +81,6 @@ func _input(event):
 		if grabbed != null:
 			grabbed.freeze = false
 			grabbed.sleeping = false
-			grabbed.can_sleep = true
 			$CounterTop.slotMe(grabbed)
 			grabbed = null
 	
