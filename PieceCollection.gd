@@ -7,7 +7,7 @@ func _ready():
 	PiecesReady.emit(self.get_children().filter(func(node): return node.get_class() == "RigidBody3D"))
 	pass
 	
-func _process(delta):
+func _process(_delta):
 	if Engine.is_editor_hint() && doEditor:
 		doEditor = false
 		for cn in self.get_children():
