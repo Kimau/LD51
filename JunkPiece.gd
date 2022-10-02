@@ -34,9 +34,15 @@ func regen():
 
 func _mouse_enter():
 	mouseTime = Time.get_ticks_msec()
+	can_sleep = false
+	sleeping = false
 	Engine.set_meta("LastTouched", self)
 
 func _mouse_exit():
+	if self.freeze:
+		pass
+	else:
+		can_sleep = true
 	if self == Engine.get_meta("LastTouched"):
 		Engine.set_meta("LastTouched", null)
 
