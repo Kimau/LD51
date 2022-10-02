@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://8s3id4gaudp7"]
+[gd_scene load_steps=29 format=3 uid="uid://8s3id4gaudp7"]
 
 [ext_resource type="Script" path="res://Game.gd" id="1_04ywe"]
 [ext_resource type="Script" path="res://JunkSrc.gd" id="3_2wj0l"]
@@ -15,6 +15,7 @@
 [ext_resource type="ArrayMesh" uid="uid://dyeyk56g3jexu" path="res://models/pieces/triangle.obj" id="11_ox0ku"]
 [ext_resource type="ArrayMesh" uid="uid://bmb6l787d0b5h" path="res://models/pieces/bell.obj" id="12_54e26"]
 [ext_resource type="PackedScene" uid="uid://fx7l8thkrt2l" path="res://Shop.tscn" id="15_0yd8v"]
+[ext_resource type="Script" path="res://CounterTop.gd" id="16_h3avl"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_2extl"]
 friction = 0.73
@@ -48,6 +49,9 @@ points = PackedVector3Array(-0.4, 0, -0.3, -0.4, 0.1, 0.0999999, -0.4, 0, 0.0999
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_imtdo"]
 radius = 0.3
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_a3r2y"]
+size = Vector3(3.95694, 2.3313, 2.13007)
 
 [node name="GameRoot" type="Node3D"]
 script = ExtResource("1_04ywe")
@@ -275,5 +279,29 @@ collision_mask = 2
 [node name="RayGrabbedToMouse" type="ShapeCast3D" parent="."]
 shape = SubResource("SphereShape3D_imtdo")
 collision_mask = 2
+
+[node name="CounterTop" type="Node3D" parent="." node_paths=PackedStringArray("trigger")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.77885, 1.00271, -1.05171)
+script = ExtResource("16_h3avl")
+trigger = NodePath("Area3d")
+slots = [NodePath("Slot1"), NodePath("Slot2"), NodePath("Slot3"), NodePath("Slot4")]
+
+[node name="Area3d" type="Area3D" parent="CounterTop"]
+
+[node name="CollisionShape3d" type="CollisionShape3D" parent="CounterTop/Area3d"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.309475, 0.985394, 0)
+shape = SubResource("BoxShape3D_a3r2y")
+
+[node name="Slot1" type="Node3D" parent="CounterTop"]
+transform = Transform3D(1, 0, 0, 0, 0.333527, -0.94274, 0, 0.94274, 0.333527, -1.65324, 0.43603, 0)
+
+[node name="Slot2" type="Node3D" parent="CounterTop"]
+transform = Transform3D(1, 0, 0, 0, 0.333527, -0.94274, 0, 0.94274, 0.333527, -0.894242, 0.43603, 0)
+
+[node name="Slot3" type="Node3D" parent="CounterTop"]
+transform = Transform3D(1, 0, 0, 0, 0.333527, -0.94274, 0, 0.94274, 0.333527, -0.186093, 0.43603, 0)
+
+[node name="Slot4" type="Node3D" parent="CounterTop"]
+transform = Transform3D(1, 0, 0, 0, 0.333527, -0.94274, 0, 0.94274, 0.333527, 0.54112, 0.43603, 0)
 
 [connection signal="PiecesReady" from="PieceCollection" to="JunkSrc" method="_on_piece_collection_pieces_ready"]

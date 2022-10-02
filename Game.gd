@@ -1,6 +1,7 @@
 extends Node3D
 
 var grabbed : RigidBody3D
+var prevGrabbed : RigidBody3D
 var grabTarget : Vector3
 var grabRot : Vector3
 @export var floor_plane : Plane
@@ -13,6 +14,9 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
+	if prevGrabbed:
+		prevGrabbed.sleeping = false
+		
 	if grabbed == null:
 		return
 	
@@ -54,15 +58,15 @@ func dragGrabbed(event : InputEventMouseMotion):
 		var cHit = camPlane.intersects_ray(r.global_position, r.target_position)
 		grabTarget = cHit
 		
-	return
-	var fHit = floor_plane.intersects_ray(c.global_position, r.target_position)
-	var wHit = wall_plane.intersects_ray(c.global_position, r.target_position)
+	var _fHit = floor_plane.intersects_ray(c.global_position, r.target_position)
+	var _wHit = wall_plane.intersects_ray(c.global_position, r.target_position)
 	return	
 	
 func _input(event):
 	if event.is_action_pressed("grabJunk"):
-		grabbed = Engine.get_meta("LastTouched")
+		grabbed = Engine.get_meta("LastTouched", null)
 		if grabbed != null:
+			$CounterTop.grabbed(grabbed)
 			grabbed.freeze = true
 			grabbed.freeze_mode = RigidBody3D.FREEZE_MODE_KINEMATIC
 			grabbed.sleeping = false
@@ -77,6 +81,7 @@ func _input(event):
 			grabbed.freeze = false
 			grabbed.sleeping = false
 			grabbed.can_sleep = true
+			$CounterTop.slotMe(grabbed)
 			grabbed = null
 	
 	if event is InputEventMouseMotion:
