@@ -4,17 +4,40 @@ var grabbed : RigidBody3D
 var prevGrabbed : RigidBody3D
 var grabTarget : Vector3
 var grabRot : Vector3
+var timeSinceCustomer : float = -1
+var timeSinceJunk : float = -1
 @export var floor_plane : Plane
 @export var wall_plane : Plane
 
+const junkStart : int = 12
+const junkMin : int = 1
+const junkMax : int = 4
+const intervalJunkMin : float = 4.0
+const intervalJunkMax : float = 6.0
+const intervalCustomer : float = 10.0
+
+func _init():
+	Engine.set_meta("NumCols", 4)
+	Engine.set_meta("NumShapes", 4)
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	$JunkSrc.dumpJunk(10)
+	$JunkSrc.dumpJunk(junkStart)
+	timeSinceJunk = randf_range(intervalJunkMin, intervalJunkMax)
 	pass # Replace with function body.
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta):
+func _process(dt):
+	timeSinceCustomer -= dt
+	timeSinceJunk -= dt
+	
+	if timeSinceJunk < 0:
+		$JunkSrc.dumpJunk(randi_range(junkMin, junkMax))
+		timeSinceJunk = randf_range(intervalJunkMin, intervalJunkMax)
+	
+	if timeSinceCustomer < 0:
+		timeSinceCustomer = intervalCustomer
+	
 	if prevGrabbed:
 		prevGrabbed.sleeping = false
 		

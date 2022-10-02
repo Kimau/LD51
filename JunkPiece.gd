@@ -5,11 +5,6 @@ var mouseTime
 
 @export var pieceType : GlobalEnum.PieceType
 var data : PieceData
-var colorCached : Color
-signal regenPiece
-
-func _init():
-	data = PieceData.new()
 	
 func _ready():
 #	var cs = CollisionShape3D.new()
@@ -20,14 +15,6 @@ func _ready():
 	
 	var kids = self.get_children()
 	meshInst = kids.filter(func(node): return node.get_class() == "MeshInstance3D")[0]
-	
-	regen()	
-	self.connect("regenPiece", regen)	
-	pass # Replace with function body.
-	
-func regen():
-	data.regen(pieceType)
-	colorCached = data.getColorCached()
 
 func _mouse_enter():
 	mouseTime = Time.get_ticks_msec()
@@ -42,8 +29,12 @@ func _mouse_exit():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
+	if data == null:
+		return
+		
 	# Emission
 	var emitCol = Color.BLACK
+	var colorCached = PieceData.getColorCached(data.colorIdx)
 	
 	if self.freeze:
 		var c1 = colorCached

@@ -7,13 +7,12 @@ class_name PieceData
 @export var jigsawLeft : GlobalEnum.JigsawConnection
 @export var jigsawRight : GlobalEnum.JigsawConnection
 
-const numCols : int = 8
-
+const maxCols : int = 8
 
 const letterRollMax : int = 182303
 
 static func rollColor(numCol :int, cd : Dictionary):
-	const maxPer = 0.3
+	var maxPer = 2.0 / numCol
 	
 	var total : int = cd.get("total", 0)
 	cd["total"] = total + 1
@@ -26,6 +25,24 @@ static func rollColor(numCol :int, cd : Dictionary):
 			c = -1
 		else:
 			cd[c] = numC+1
+	# end while
+	
+	return c
+
+static func rollShape(numShapes:int, sd : Dictionary):
+	var maxPer = 2.0 / numShapes
+	
+	var total : int = sd.get("total", 0)
+	sd["total"] = total + 1
+	
+	var c : int = -1
+	while c < 0:
+		c = randi() % numShapes
+		var numC = sd.get(c, 0)
+		if (numC / maxPer) > total:
+			c = -1
+		else:
+			sd[c] = numC+1
 	# end while
 	
 	return c
@@ -69,14 +86,24 @@ static func rollLetter(ld : Dictionary):
 		lRoll -= l[1]
 	#end for
 	return lRes
+
+static func newReq():
+	match randi_range(0,10):
+		1, 2, 3, 4:
+			return { "colorIdx": rollColor(Engine.get_meta("NumCols"), {})}
+		5, 6, 7, 8:
+			return { "shapeType": rollShape(Engine.get_meta("NumShapes"), {})}
+	return { "colorIdx": 0}
 	
-func regen(pt):
-	shapeType = pt if pt else 0
+func regen():
 	var globalCD : Dictionary = Engine.get_meta("ColDict", {})
-	colorIdx = rollColor(numCols, globalCD)
+	var globalSD : Dictionary = Engine.get_meta("ShapeDict", {})
+	colorIdx = rollColor(Engine.get_meta("NumCols"), globalCD)
+	shapeType = rollShape(Engine.get_meta("NumShapes"), globalSD)
 	Engine.set_meta("ColDict", globalCD)
+	Engine.set_meta("ShapeDict", globalSD)
 	
-	match pt:
+	match shapeType:
 		GlobalEnum.PieceType.Letter:
 			var globalLD : Dictionary = Engine.get_meta("LetDict", {})
 			letterData = rollLetter(globalLD)
@@ -87,7 +114,7 @@ func regen(pt):
 	#print("REGEN ", shapeType, " - ", colorIdx)
 	
 	
-func getColorCached():
+static func getColorCached(colorIdx : int):
 	var colorVales : PackedColorArray = [
 		Color.DARK_RED, # .hex(0xd85736),
 		Color.DARK_GREEN,

@@ -1,8 +1,10 @@
 extends Node3D
 
-var pieceCollection : Array
+var pieceByShape : Dictionary
 var junkQ : int = 0
 var lastDump : float = -1
+
+const intervalJunkSpawn : float = 0.1
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -18,23 +20,31 @@ func _process(dt):
 	if junkQ > 0 && lastDump < 0:
 		spawnJunk()
 		junkQ -= 1
-		lastDump = 0.3
+		lastDump = intervalJunkSpawn
 	pass
 
 func dumpJunk(numJunk : int):
 	junkQ += numJunk
 	
 func spawnJunk():
-	var i : int = randi_range(0, pieceCollection.size()-1)
-	var p : Node = pieceCollection[i]
+	var newData = PieceData.new()
+	newData.regen()
+	
+	var p : Node = pieceByShape[newData.shapeType][randi() % pieceByShape[newData.shapeType].size()]
 	var np : Node = p.duplicate()
 	self.add_child(np)
 	var rb : RigidBody3D = np as RigidBody3D
 	rb.freeze = false
 	rb.transform = Transform3D.IDENTITY
-	# np.emit_signal("regenPiece") - self emit on Ready
+	
+	np.data = newData
 
 func _on_piece_collection_pieces_ready(pieceList : Array):
-	pieceCollection = pieceList
-	for p in pieceCollection:
-		print(p.name, "=", p.pieceType)
+	pieceByShape = {}
+	for p in pieceList:
+		var pi : int = p.pieceType if p.pieceType else 0
+		
+		if pieceByShape.has(pi):
+			pieceByShape[pi].push_back(p)
+		else:
+			pieceByShape[pi] = [p]

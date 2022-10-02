@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://8s3id4gaudp7"]
+[gd_scene load_steps=46 format=3 uid="uid://8s3id4gaudp7"]
 
 [ext_resource type="Script" path="res://Game.gd" id="1_04ywe"]
 [ext_resource type="Script" path="res://JunkSrc.gd" id="3_2wj0l"]
@@ -16,6 +16,10 @@
 [ext_resource type="ArrayMesh" uid="uid://bmb6l787d0b5h" path="res://models/pieces/bell.obj" id="12_54e26"]
 [ext_resource type="PackedScene" uid="uid://fx7l8thkrt2l" path="res://Shop.tscn" id="15_0yd8v"]
 [ext_resource type="Script" path="res://CounterTop.gd" id="16_h3avl"]
+[ext_resource type="Material" uid="uid://b87l761udbxr3" path="res://mat_sprite.tres" id="17_ds1h7"]
+[ext_resource type="Texture2D" uid="uid://8tl2qwf3mp4n" path="res://icons.png" id="18_0t5bj"]
+[ext_resource type="Shader" uid="uid://clysqskb4bgdw" path="res://particleShader.tres" id="19_h4jik"]
+[ext_resource type="Script" path="res://Bell.gd" id="19_yvyl2"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_2extl"]
 friction = 0.73
@@ -61,6 +65,106 @@ radius = 0.3
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_a3r2y"]
 size = Vector3(3.95694, 2.3313, 2.13007)
+
+[sub_resource type="Curve" id="Curve_iq6sp"]
+_data = [Vector2(0.0134409, 0.763636), 0.0, 1.70949, 0, 0, Vector2(1, 0.0636363), -1.18821, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_22bmd"]
+curve = SubResource("Curve_iq6sp")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_chycc"]
+lifetime_randomness = 0.05
+emission_shape = 6
+emission_ring_axis = Vector3(0, 1, 0)
+emission_ring_height = 0.0
+emission_ring_radius = 0.3
+emission_ring_inner_radius = 0.3
+direction = Vector3(0, 1, 0)
+spread = 5.0
+gravity = Vector3(0, 0.6, 0)
+initial_velocity_max = 0.3
+scale_min = 0.3
+scale_max = 0.5
+scale_curve = SubResource("CurveTexture_22bmd")
+color = Color(0.945098, 0, 0.733333, 1)
+hue_variation_min = -0.31
+hue_variation_max = 0.33
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_svp68"]
+render_priority = 0
+shader = ExtResource("19_h4jik")
+
+[sub_resource type="BoxMesh" id="BoxMesh_dutf4"]
+material = SubResource("ShaderMaterial_svp68")
+size = Vector3(0.2, 0.2, 0.2)
+
+[sub_resource type="Skin" id="Skin_dr3fx"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_b4a2y"]
+radius = 0.534784
+
+[sub_resource type="Animation" id="Animation_wn3uj"]
+resource_name = "good_deal"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../CanvasLayer/GoodDeal:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.1, 0.2, 1.7, 1.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [false, true, true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../CanvasLayer/GoodDeal:visible_ratio")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+
+[sub_resource type="Animation" id="Animation_nv7bi"]
+resource_name = "bad_deal"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../CanvasLayer/BadDeal:visible_ratio")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../CanvasLayer/BadDeal:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.1, 1.9),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6detv"]
+_data = {
+"bad_deal": SubResource("Animation_nv7bi"),
+"good_deal": SubResource("Animation_wn3uj")
+}
 
 [node name="GameRoot" type="Node3D"]
 script = ExtResource("1_04ywe")
@@ -305,11 +409,32 @@ collision_mask = 2
 shape = SubResource("SphereShape3D_imtdo")
 collision_mask = 2
 
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="GoodDeal" type="RichTextLabel" parent="CanvasLayer"]
+visible = false
+offset_left = 787.0
+offset_top = 563.0
+offset_right = 1122.0
+offset_bottom = 612.0
+bbcode_enabled = true
+text = "[outline_size=2][outline_color=gold][font s=30]This is a good deal...[/font][/outline_color][/outline_size]"
+visible_characters = 13
+visible_ratio = 0.615385
+
+[node name="BadDeal" type="RichTextLabel" parent="CanvasLayer"]
+visible = false
+offset_left = 787.0
+offset_top = 563.0
+offset_right = 1132.0
+offset_bottom = 620.0
+bbcode_enabled = true
+text = "[outline_size=2][outline_color=red][font s=30]Terrible Service!![/font][/outline_color][/outline_size]"
+
 [node name="CounterTop" type="Node3D" parent="." node_paths=PackedStringArray("trigger")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.77885, 1.00271, -1.05171)
 script = ExtResource("16_h3avl")
 trigger = NodePath("Area3d")
-slots = [NodePath("Slot1"), NodePath("Slot2"), NodePath("Slot3"), NodePath("Slot4")]
 
 [node name="Area3d" type="Area3D" parent="CounterTop"]
 input_ray_pickable = false
@@ -321,13 +446,78 @@ shape = SubResource("BoxShape3D_a3r2y")
 [node name="Slot1" type="Node3D" parent="CounterTop"]
 transform = Transform3D(1, 0, 0, 0, 0.333527, -0.94274, 0, 0.94274, 0.333527, -1.65324, 0.43603, 0)
 
+[node name="Req1" type="Sprite3D" parent="CounterTop/Slot1"]
+transform = Transform3D(2.006, 0, 0, 0, 0.669056, 1.89114, 0, -1.89114, 0.669056, 0.168198, -1.08517, -1.09466)
+material_override = ExtResource("17_ds1h7")
+texture = ExtResource("18_0t5bj")
+region_enabled = true
+region_rect = Rect2(0, 0, 32, 32)
+
+[node name="GpuParticles3d" type="GPUParticles3D" parent="CounterTop/Slot1"]
+transform = Transform3D(1, 0, 0, 0, 0.311589, 0.950217, 0, -0.950217, 0.311589, 0, -0.199695, 0.564453)
+amount = 30
+lifetime = 1.61
+preprocess = 0.35
+process_material = SubResource("ParticleProcessMaterial_chycc")
+draw_pass_1 = SubResource("BoxMesh_dutf4")
+draw_skin = SubResource("Skin_dr3fx")
+
 [node name="Slot2" type="Node3D" parent="CounterTop"]
 transform = Transform3D(1, 0, 0, 0, 0.333527, -0.94274, 0, 0.94274, 0.333527, -0.894242, 0.43603, 0)
+
+[node name="Req2" type="Sprite3D" parent="CounterTop/Slot2"]
+transform = Transform3D(2.006, 0, 0, 0, 0.669056, 1.89114, 0, -1.89114, 0.669056, 0.350297, -1.08517, -1.09466)
+material_override = ExtResource("17_ds1h7")
+texture = ExtResource("18_0t5bj")
+region_enabled = true
+region_rect = Rect2(0, 0, 32, 32)
 
 [node name="Slot3" type="Node3D" parent="CounterTop"]
 transform = Transform3D(1, 0, 0, 0, 0.333527, -0.94274, 0, 0.94274, 0.333527, -0.186093, 0.43603, 0)
 
+[node name="Req3" type="Sprite3D" parent="CounterTop/Slot3"]
+transform = Transform3D(2.006, 0, 0, 0, 0.669056, 1.89114, 0, -1.89114, 0.669056, 0.634563, -1.08517, -1.09466)
+material_override = ExtResource("17_ds1h7")
+texture = ExtResource("18_0t5bj")
+region_enabled = true
+region_rect = Rect2(0, 0, 32, 32)
+
 [node name="Slot4" type="Node3D" parent="CounterTop"]
 transform = Transform3D(1, 0, 0, 0, 0.333527, -0.94274, 0, 0.94274, 0.333527, 0.54112, 0.43603, 0)
 
+[node name="Req4" type="Sprite3D" parent="CounterTop/Slot4"]
+transform = Transform3D(2.006, 0, 0, 0, 0.669056, 1.89114, 0, -1.89114, 0.669056, 0.834836, -1.08517, -1.09466)
+material_override = ExtResource("17_ds1h7")
+texture = ExtResource("18_0t5bj")
+region_enabled = true
+region_rect = Rect2(0, 0, 32, 32)
+
+[node name="Bell" type="Area3D" parent="CounterTop"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.402, 0, -0.22265)
+script = ExtResource("19_yvyl2")
+colorGood = Color(0.91, 0.86086, 0.1729, 1)
+colorBad = Color(0.839216, 0.0431373, 0.0823529, 1)
+
+[node name="BellLight" type="OmniLight3D" parent="CounterTop/Bell"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.106542, 0.456573, 0.191196)
+light_color = Color(1, 1, 0.262745, 1)
+light_energy = 0.0
+light_indirect_energy = 0.0
+light_size = 0.231
+shadow_enabled = true
+distance_fade_enabled = true
+distance_fade_begin = 1.59
+distance_fade_length = 4.32
+
+[node name="CollisionShape3d" type="CollisionShape3D" parent="CounterTop/Bell"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.188787, 0)
+shape = SubResource("SphereShape3D_b4a2y")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CounterTop"]
+libraries = {
+"": SubResource("AnimationLibrary_6detv")
+}
+
 [connection signal="PiecesReady" from="PieceCollection" to="JunkSrc" method="_on_piece_collection_pieces_ready"]
+[connection signal="ring" from="CounterTop/Bell" to="CounterTop" method="_on_bell_ring"]
+[connection signal="animation_finished" from="CounterTop/AnimationPlayer" to="CounterTop" method="_on_animation_player_animation_finished"]

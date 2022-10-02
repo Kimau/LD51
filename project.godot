@@ -53,3 +53,10 @@ common/physics_ticks_per_second=120
 [rendering]
 
 vulkan/rendering/back_end=1
+
+[shader_globals]
+
+spriteSampler={
+"type": "sampler2D",
+"value": "res://icons.png"
+}
