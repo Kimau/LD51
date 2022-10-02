@@ -4,7 +4,7 @@ var grabbed : RigidBody3D
 var prevGrabbed : RigidBody3D
 var grabTarget : Vector3
 var grabRot : Vector3
-var timeSinceCustomer : float = -1
+var timeSinceCustomer : float = intervalCustomer
 var timeSinceJunk : float = -1
 @export var floor_plane : Plane
 @export var wall_plane : Plane
@@ -28,15 +28,26 @@ func _ready():
 
 
 func _process(dt):
-	timeSinceCustomer -= dt
-	timeSinceJunk -= dt
-	
+	timeSinceJunk -= dt	
 	if timeSinceJunk < 0:
 		$JunkSrc.dumpJunk(randi_range(junkMin, junkMax))
 		timeSinceJunk = randf_range(intervalJunkMin, intervalJunkMax)
 	
-	if timeSinceCustomer < 0:
+	if $CounterTop.waiting:
+		$CanvasLayer/CustTimer.visible = false
 		timeSinceCustomer = intervalCustomer
+	else:
+		timeSinceCustomer -= dt
+		if ceil(timeSinceCustomer) != ceil(timeSinceCustomer + dt):
+			$CanvasLayer/CustTimer.visible = true
+			$CanvasLayer/CustTimer.text = str(
+				"[center][outline_size=2][outline_color=black][font s=70]",
+				ceil(timeSinceCustomer),
+				"[/font][/outline_color][/outline_size][/center]")
+				
+		if timeSinceCustomer < 0:
+			$CounterTop._on_bell_ring()
+			timeSinceCustomer = intervalCustomer
 	
 	if prevGrabbed:
 		prevGrabbed.sleeping = false

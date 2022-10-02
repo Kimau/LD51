@@ -16,6 +16,7 @@ func _process(_delta):
 	var bl : OmniLight3D = $BellLight
 	if bl == null:
 		return
+	$PressMe.visible = dealGood
 	if dealGood:
 		bl.light_color = colorGood
 	else:

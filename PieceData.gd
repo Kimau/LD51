@@ -114,7 +114,7 @@ func regen():
 	#print("REGEN ", shapeType, " - ", colorIdx)
 	
 	
-static func getColorCached(colorIdx : int):
+static func getColorCached(idx : int):
 	var colorVales : PackedColorArray = [
 		Color.DARK_RED, # .hex(0xd85736),
 		Color.DARK_GREEN,
@@ -126,5 +126,5 @@ static func getColorCached(colorIdx : int):
 		Color.DARK_GRAY,
 		Color.PINK
 	]
-	return colorVales[colorIdx]
+	return colorVales[idx]
 

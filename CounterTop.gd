@@ -3,7 +3,6 @@ extends Node3D
 @export var trigger : Area3D
 @export var animGood : Animation
 
-var numPieces : int = 0
 var inSlot : Dictionary = {}
 var custReq : Array = []
 var dealGood : bool = false
@@ -16,10 +15,10 @@ func _ready():
 	trigger.body_entered.connect(body_enter_trigger)
 	trigger.body_exited.connect(body_exit_trigger)
 	node_slots = { 
-		0:[$Slot1, $Slot1/Req1, false],
-		1:[$Slot2, $Slot2/Req2, false],
-		2:[$Slot3, $Slot3/Req3, false],
-		3:[$Slot4, $Slot4/Req4, false] 
+		0:[$Slot1, $Slot1/Req1, false, $Slot1/MagicCircle1],
+		1:[$Slot2, $Slot2/Req2, false, $Slot2/MagicCircle2],
+		2:[$Slot3, $Slot3/Req3, false, $Slot3/MagicCircle3],
+		3:[$Slot4, $Slot4/Req4, false, $Slot4/MagicCircle4] 
 	}
 	custReq = [{},{},{},{}]
 	inSlot = {0:null, 1:null, 2:null, 3:null}
@@ -37,7 +36,9 @@ func _processSlot(k):
 	var tarSlot = node_slots[k][0]
 	const timeToLerp = 350.0
 	if p == null:
+		node_slots[k][3].visible = true
 		return
+	node_slots[k][3].visible = false
 	p[0].freeze = true
 	if p[1] < 0:
 		return
@@ -70,7 +71,8 @@ func grabbed(piece : RigidBody3D):
 		if inSlot[k][0] != piece:
 			continue
 		inSlot[k] = null
-		numPieces -= 1
+	if piece.get_meta("CounterTop") == -100:
+		body_enter_trigger(piece)
 	evalDeal()
 		
 func slotMe(piece : RigidBody3D):
@@ -80,7 +82,6 @@ func slotMe(piece : RigidBody3D):
 	
 	piece.freeze = true
 	inSlot[s] = [piece, Time.get_ticks_msec(), piece.global_transform]
-	numPieces += 1
 	evalDeal()
 
 func _on_bell_ring():
@@ -100,7 +101,6 @@ func _on_bell_ring():
 			return false
 		inSlot[k][0].queue_free()
 		inSlot[k] = null
-	numPieces = 0
 	dealGood = false
 
 func newDeal():
@@ -141,8 +141,6 @@ func newDeal():
 func evalDeal():
 	dealGood = _subEvalDeal()
 	$Bell.dealGood = dealGood
-	print("Deal: ", dealGood, 
-		node_slots[0][2], node_slots[1][2], node_slots[2][2], node_slots[3][2])
 	
 func _subEvalDeal():
 	var gd = true
@@ -166,14 +164,19 @@ func _subEvalDeal():
 	return gd
 	
 func body_enter_trigger(body : Node3D):
-	if numPieces >= node_slots.size():
-		return
-	body.set_meta("CounterTop", numPieces)	
+	for k in inSlot:
+		if custReq[k] == null || custReq[k] == {}:
+			continue
+		if inSlot[k] == null:
+			body.set_meta("CounterTop", k)
+			return
+		
+	body.set_meta("CounterTop", -100)
 	pass
 	
 func body_exit_trigger(body : Node3D):
 	body.set_meta("CounterTop", -1)
 	pass
 
-func _on_animation_player_animation_finished(anim_name):
+func _on_animation_player_animation_finished(_anim_name):
 	newDeal()
