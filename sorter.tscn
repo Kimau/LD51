@@ -1,6 +1,7 @@
-[gd_scene load_steps=46 format=3 uid="uid://8s3id4gaudp7"]
+[gd_scene load_steps=49 format=3 uid="uid://8s3id4gaudp7"]
 
 [ext_resource type="Script" path="res://Game.gd" id="1_04ywe"]
+[ext_resource type="PackedScene" uid="uid://bjmyks1nunpg8" path="res://sign.tscn" id="2_d8k5n"]
 [ext_resource type="Script" path="res://JunkSrc.gd" id="3_2wj0l"]
 [ext_resource type="Script" path="res://PieceCollection.gd" id="3_7poyq"]
 [ext_resource type="ArrayMesh" uid="uid://xkev4e1iousy" path="res://models/pieces/corner.obj" id="4_ms7h6"]
@@ -160,10 +161,56 @@ tracks/1/keys = {
 "values": [0.0, 1.0]
 }
 
+[sub_resource type="Animation" id="Animation_uc5k4"]
+resource_name = "start_game"
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../sign")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 1.78005, 2.225, 0.0423975, 0.3, 1, 1.78, 4, 0.042, 0.6, 1, 1.78, 5.252, 0.042)
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../sign:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_jg77p"]
+resource_name = "end_game"
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../sign")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 1.78, 5.252, 0.042, 0.2, 1, 1.78, 4, 0.042, 0.5, 1, 1.78005, 2.225, 0.0423975)
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../sign:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, true]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_6detv"]
 _data = {
 "bad_deal": SubResource("Animation_nv7bi"),
-"good_deal": SubResource("Animation_wn3uj")
+"end_game": SubResource("Animation_jg77p"),
+"good_deal": SubResource("Animation_wn3uj"),
+"start_game": SubResource("Animation_uc5k4")
 }
 
 [node name="GameRoot" type="Node3D"]
@@ -171,6 +218,9 @@ script = ExtResource("1_04ywe")
 floor_plane = Plane(0, 1, 0, 0)
 wall_plane = Plane(0, 0, 1, -1.749)
 metadata/PieceCols = PackedColorArray(0.847059, 0.341176, 0.211765, 1, 0.211765, 0.85098, 0.286275, 1, 0.211765, 0.572549, 0.85098, 1, 0.85098, 0.752941, 0.211765, 1, 0.643137, 0.878431, 0.952941, 1, 0.258824, 0.168627, 0.85098, 1, 0.929412, 0.360784, 0.654902, 1, 0.85098, 0.129412, 0.141176, 1)
+
+[node name="sign" parent="." instance=ExtResource("2_d8k5n")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.78005, 2.225, 0.0423975)
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.96363, -0.224125, 0.145548, 0, 0.544639, 0.838671, -0.267238, 0.808169, -0.524831, 0, 7.45342, -2.25256)
@@ -431,13 +481,14 @@ bbcode_enabled = true
 text = "[center][outline_size=2][outline_color=black][font s=70]10[/font][/outline_color][/outline_size][/center]"
 
 [node name="BadDeal" type="RichTextLabel" parent="CanvasLayer"]
-visible = false
 offset_left = 787.0
 offset_top = 563.0
 offset_right = 1132.0
 offset_bottom = 620.0
 bbcode_enabled = true
 text = "[outline_size=2][outline_color=red][font s=30]Terrible Service!![/font][/outline_color][/outline_size]"
+visible_characters = 0
+visible_ratio = 0.0
 
 [node name="CounterTop" type="Node3D" parent="." node_paths=PackedStringArray("trigger")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.77885, 1.00271, -1.05171)
@@ -453,6 +504,7 @@ shape = SubResource("BoxShape3D_a3r2y")
 
 [node name="Slot1" type="Node3D" parent="CounterTop"]
 transform = Transform3D(1, 0, 0, 0, 0.333527, -0.94274, 0, 0.94274, 0.333527, -1.65324, 0.43603, 0)
+visible = false
 
 [node name="Req1" type="Sprite3D" parent="CounterTop/Slot1"]
 transform = Transform3D(2.006, 0, 0, 0, 0.669056, 1.89114, 0, -1.89114, 0.669056, 0.168198, -1.08517, -1.09466)
@@ -472,6 +524,7 @@ draw_skin = SubResource("Skin_dr3fx")
 
 [node name="Slot2" type="Node3D" parent="CounterTop"]
 transform = Transform3D(1, 0, 0, 0, 0.333527, -0.94274, 0, 0.94274, 0.333527, -0.894242, 0.43603, 0)
+visible = false
 
 [node name="Req2" type="Sprite3D" parent="CounterTop/Slot2"]
 transform = Transform3D(2.006, 0, 0, 0, 0.669056, 1.89114, 0, -1.89114, 0.669056, 0.350297, -1.08517, -1.09466)
@@ -491,6 +544,7 @@ draw_skin = SubResource("Skin_dr3fx")
 
 [node name="Slot3" type="Node3D" parent="CounterTop"]
 transform = Transform3D(1, 0, 0, 0, 0.333527, -0.94274, 0, 0.94274, 0.333527, -0.186093, 0.43603, 0)
+visible = false
 
 [node name="Req3" type="Sprite3D" parent="CounterTop/Slot3"]
 transform = Transform3D(2.006, 0, 0, 0, 0.669056, 1.89114, 0, -1.89114, 0.669056, 0.634563, -1.08517, -1.09466)
@@ -510,6 +564,7 @@ draw_skin = SubResource("Skin_dr3fx")
 
 [node name="Slot4" type="Node3D" parent="CounterTop"]
 transform = Transform3D(1, 0, 0, 0, 0.333527, -0.94274, 0, 0.94274, 0.333527, 0.54112, 0.43603, 0)
+visible = false
 
 [node name="Req4" type="Sprite3D" parent="CounterTop/Slot4"]
 transform = Transform3D(2.006, 0, 0, 0, 0.669056, 1.89114, 0, -1.89114, 0.669056, 0.834836, -1.08517, -1.09466)
@@ -550,6 +605,7 @@ shape = SubResource("SphereShape3D_b4a2y")
 
 [node name="PressMe" type="Sprite3D" parent="CounterTop/Bell"]
 transform = Transform3D(2.006, 0, 0, 0, 2.006, 3.57628e-07, 0, -3.57628e-07, 2.006, -0.0260439, 0.479013, -0.0865947)
+visible = false
 material_override = ExtResource("17_ds1h7")
 shader_uniforms/ColorParameter = Color(0.878431, 0.839216, 0.494118, 1)
 texture = ExtResource("18_0t5bj")
@@ -561,6 +617,8 @@ libraries = {
 "": SubResource("AnimationLibrary_6detv")
 }
 
+[connection signal="newGame" from="sign" to="." method="_on_sign_new_game"]
 [connection signal="PiecesReady" from="PieceCollection" to="JunkSrc" method="_on_piece_collection_pieces_ready"]
 [connection signal="ring" from="CounterTop/Bell" to="CounterTop" method="_on_bell_ring"]
+[connection signal="animation_finished" from="CounterTop/AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
 [connection signal="animation_finished" from="CounterTop/AnimationPlayer" to="CounterTop" method="_on_animation_player_animation_finished"]

@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=3 uid="uid://bjmyks1nunpg8"]
+
+[ext_resource type="PackedScene" uid="uid://dynccusfg7lcv" path="res://models/env/sign.glb" id="1_x5wcw"]
+[ext_resource type="Script" path="res://sign.gd" id="2_v0h5a"]
+[ext_resource type="TextMesh" uid="uid://mwknvr5sf0jb" path="res://score_mesh.tres" id="3_xenuj"]
+[ext_resource type="Material" uid="uid://clx4pxn8qj170" path="res://mat_piece.tres" id="4_g08oh"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_j1bni"]
+size = Vector3(3.92008, 0.861612, 0.57484)
+
+[node name="sign" instance=ExtResource("1_x5wcw")]
+script = ExtResource("2_v0h5a")
+
+[node name="SpotLight3d" type="SpotLight3D" parent="." index="1"]
+transform = Transform3D(1, 0, 0, 0, 0.848104, 0.529831, 0, -0.529831, 0.848104, 0, 1.90608, 2.35419)
+shadow_enabled = true
+spot_range = 4.62797
+spot_angle = 21.6765
+
+[node name="Area3d" type="Area3D" parent="." index="2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.196053, 0)
+
+[node name="CollisionShape3d" type="CollisionShape3D" parent="Area3d" index="0"]
+shape = SubResource("BoxShape3D_j1bni")
+
+[node name="CsgMesh3d" type="CSGMesh3D" parent="." index="3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.24678, 0.099352)
+mesh = ExtResource("3_xenuj")
+material = ExtResource("4_g08oh")
+
+[connection signal="mouse_entered" from="Area3d" to="." method="_on_area_3d_mouse_entered"]
+[connection signal="mouse_exited" from="Area3d" to="." method="_on_area_3d_mouse_exited"]

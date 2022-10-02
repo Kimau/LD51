@@ -1,7 +1,6 @@
 extends Area3D
 
 var lightOn : bool = false
-var dealGood : bool = false
 @export var colorGood : Color
 @export var colorBad : Color
 signal ring
@@ -16,8 +15,10 @@ func _process(_delta):
 	var bl : OmniLight3D = $BellLight
 	if bl == null:
 		return
-	$PressMe.visible = dealGood
-	if dealGood:
+
+	var dg = get_parent().dealGood
+	$PressMe.visible = dg
+	if dg:
 		bl.light_color = colorGood
 	else:
 		bl.light_color = colorBad

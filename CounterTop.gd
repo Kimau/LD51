@@ -22,8 +22,6 @@ func _ready():
 	}
 	custReq = [{},{},{},{}]
 	inSlot = {0:null, 1:null, 2:null, 3:null}
-	newDeal()
-
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
@@ -71,8 +69,9 @@ func grabbed(piece : RigidBody3D):
 		if inSlot[k][0] != piece:
 			continue
 		inSlot[k] = null
-	if piece.get_meta("CounterTop") == -100:
-		body_enter_trigger(piece)
+	if piece.has_meta("CounterTop"):
+		if piece.get_meta("CounterTop") == -100:
+			body_enter_trigger(piece)
 	evalDeal()
 		
 func slotMe(piece : RigidBody3D):
@@ -104,8 +103,10 @@ func _on_bell_ring():
 	dealGood = false
 
 func newDeal():
+	dealGood = false
 	var numSlots : int = randi_range(2,4)
 	for k in node_slots:
+		custReq[k] = {}
 		node_slots[k][0].visible = false
 		if numSlots <= 0:
 			continue
@@ -140,7 +141,6 @@ func newDeal():
 
 func evalDeal():
 	dealGood = _subEvalDeal()
-	$Bell.dealGood = dealGood
 	
 func _subEvalDeal():
 	var gd = true
@@ -151,6 +151,7 @@ func _subEvalDeal():
 			
 		if inSlot[k] == null:
 			node_slots[k][2] = false
+			print(str(k, " : empty"))
 			gd = false
 			continue
 			
@@ -159,6 +160,7 @@ func _subEvalDeal():
 			var a = p[0].data[t]
 			var b = custReq[k][t]
 			if a != b:
+				print(str(k, " : ", t, " [", a, "!=", b))
 				node_slots[k][2] = false
 				gd = false
 	return gd
@@ -178,5 +180,8 @@ func body_exit_trigger(body : Node3D):
 	body.set_meta("CounterTop", -1)
 	pass
 
-func _on_animation_player_animation_finished(_anim_name):
-	newDeal()
+func _on_animation_player_animation_finished(anim_name):
+	if anim_name == "good_deal":
+		newDeal()
+	if anim_name == "bad_deal":
+		newDeal()	

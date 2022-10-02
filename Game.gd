@@ -6,6 +6,10 @@ var grabTarget : Vector3
 var grabRot : Vector3
 var timeSinceCustomer : float = intervalCustomer
 var timeSinceJunk : float = -1
+var gameRunning = false
+var count_good : int = 0
+var count_bad : int = 0
+
 @export var floor_plane : Plane
 @export var wall_plane : Plane
 
@@ -14,20 +18,39 @@ const junkMin : int = 1
 const junkMax : int = 4
 const intervalJunkMin : float = 4.0
 const intervalJunkMax : float = 6.0
-const intervalCustomer : float = 10.0
+const intervalCustomer : float = 10.5
 
 func _init():
 	Engine.set_meta("NumCols", 4)
 	Engine.set_meta("NumShapes", 4)
+	Engine.set_meta("LastTouched", null)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	$JunkSrc.dumpJunk(junkStart)
-	timeSinceJunk = randf_range(intervalJunkMin, intervalJunkMax)
 	pass # Replace with function body.
 
+func startGame():
+	count_good = 0
+	count_bad = 0
+	gameRunning = true
+	$JunkSrc.clearJunk()
+	$CounterTop.newDeal()
+	$JunkSrc.dumpJunk(junkStart)
+	timeSinceJunk = randf_range(intervalJunkMin, intervalJunkMax)
+	timeSinceCustomer = intervalCustomer
+
+func end_game():
+	$CanvasLayer/CustTimer.visible = false
+	gameRunning = false
+	$CounterTop/AnimationPlayer.play("end_game")
+	
+	var scoreMesh = load("res://score_mesh.tres")
+	scoreMesh.text = str("Score: ", count_good)
 
 func _process(dt):
+	if not gameRunning:
+		return
+		
 	timeSinceJunk -= dt	
 	if timeSinceJunk < 0:
 		$JunkSrc.dumpJunk(randi_range(junkMin, junkMax))
@@ -98,6 +121,9 @@ func dragGrabbed(event : InputEventMouseMotion):
 	return	
 	
 func _input(event):
+	if not gameRunning:
+		return
+		
 	if event.is_action_pressed("grabJunk"):
 		grabbed = Engine.get_meta("LastTouched", null)
 		if grabbed != null:
@@ -120,3 +146,18 @@ func _input(event):
 	
 	if event is InputEventMouseMotion:
 		dragGrabbed(event)
+
+
+func _on_sign_new_game():
+	$CounterTop/AnimationPlayer.play("start_game")
+
+
+func _on_animation_player_animation_finished(anim_name):
+	if anim_name == "start_game":
+		startGame()
+	if anim_name == "good_deal":
+		count_good += 1
+	if anim_name == "bad_deal":
+		count_bad += 1
+		if (count_bad) >= 3:
+			end_game()

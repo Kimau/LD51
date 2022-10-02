@@ -1,9 +1,12 @@
-[gd_scene load_steps=23 format=3 uid="uid://fx7l8thkrt2l"]
+[gd_scene load_steps=24 format=3 uid="uid://fx7l8thkrt2l"]
 
 [ext_resource type="PackedScene" uid="uid://7bngxakpbh8b" path="res://models/env/shop.glb" id="1_r0cv2"]
 [ext_resource type="Material" uid="uid://dwjqjd82rd21r" path="res://mat_black.tres" id="2_obk4e"]
 [ext_resource type="PhysicsMaterial" uid="uid://deh4kegjhuupp" path="res://phys_rough.tres" id="3_0iact"]
 [ext_resource type="PhysicsMaterial" uid="uid://dsiibkmqcknua" path="res://phys_slip.tres" id="4_s4ia5"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vwr2n"]
+albedo_color = Color(0.670588, 0.635294, 0.960784, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_owgya"]
 size = Vector3(2.93756, 3.28052, 0.174858)
@@ -72,7 +75,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 rotation_edit_mode = 0
 rotation_order = 2
 top_level = false
-visible = false
+visible = true
 visibility_parent = NodePath("")
 layers = 1
 material_override = ExtResource("2_obk4e")
@@ -101,7 +104,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.65843, -1.52902, 1.67325)
 material_override = ExtResource("2_obk4e")
 size = Vector3(1, 14.6921, 10.3929)
 
-[node name="CsgBox3d3" type="CSGBox3D" parent="BlackBack" index="2"]
+[node name="CsgBox3d4" type="CSGBox3D" parent="BlackBack" index="2"]
+transform = Transform3D(-0.0935175, 0, 0.995618, 0, 1, 0, -0.995618, 0, -0.0935175, 2.68552, -1.52902, -8.75893)
+material_override = SubResource("StandardMaterial3D_vwr2n")
+size = Vector3(1, 14.6921, 20.8938)
+
+[node name="CsgBox3d3" type="CSGBox3D" parent="BlackBack" index="3"]
 transform = Transform3D(-0.0219196, -0.99976, 0, 0.99976, -0.0219196, 0, 0, 0, 1, 0.135052, -5.22865, 1.6809)
 material_override = ExtResource("2_obk4e")
 size = Vector3(1, 14.6921, 10.3929)

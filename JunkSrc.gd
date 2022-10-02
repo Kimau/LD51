@@ -23,6 +23,10 @@ func _process(dt):
 		lastDump = intervalJunkSpawn
 	pass
 
+func clearJunk():
+	for p in get_children():
+		p.queue_free()
+
 func dumpJunk(numJunk : int):
 	junkQ += numJunk
 	

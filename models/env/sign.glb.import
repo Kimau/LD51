@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://dvdvu5nsocjrr"
-path="res://.godot/imported/chute.glb-6d8240da6103f4482a169a08c3b4a919.scn"
+uid="uid://dynccusfg7lcv"
+path="res://.godot/imported/sign.glb-e432d53b56b492d4e988f8f742a160e1.scn"
 
 [deps]
 
-source_file="res://models/env/chute.glb"
-dest_files=["res://.godot/imported/chute.glb-6d8240da6103f4482a169a08c3b4a919.scn"]
+source_file="res://models/env/sign.glb"
+dest_files=["res://.godot/imported/sign.glb-e432d53b56b492d4e988f8f742a160e1.scn"]
 
 [params]
 
@@ -22,7 +22,7 @@ meshes/generate_lods=true
 meshes/create_shadow_meshes=true
 meshes/light_baking=1
 meshes/lightmap_texel_size=0.2
-skins/use_named_skins=true
+skins/use_named_skins=false
 animation/import=false
 animation/fps=30
 import_script/path=""
