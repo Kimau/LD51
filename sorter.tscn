@@ -133,6 +133,28 @@ tracks/1/keys = {
 "values": [true, false]
 }
 
+[sub_resource type="Animation" id="Animation_jg77p"]
+resource_name = "end_game"
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../sign")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 1.78, 5.252, 0.042, 0.2, 1, 1.78, 4, 0.042, 0.5, 1, 1.78005, 2.225, 0.0423975)
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../sign:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.8),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, true]
+}
+
 [sub_resource type="Animation" id="Animation_wn3uj"]
 resource_name = "good_deal"
 length = 2.0
@@ -181,28 +203,6 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
-}
-
-[sub_resource type="Animation" id="Animation_jg77p"]
-resource_name = "end_game"
-tracks/0/type = "position_3d"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../sign")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = PackedFloat32Array(0, 1, 1.78, 5.252, 0.042, 0.2, 1, 1.78, 4, 0.042, 0.5, 1, 1.78005, 2.225, 0.0423975)
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../sign:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.8),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [true, true]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_6detv"]
@@ -311,7 +311,7 @@ shape = SubResource("ConvexPolygonShape3D_qvdt8")
 
 [node name="JigsawAa" type="MeshInstance3D" parent="PieceCollection/P JigsawAa"]
 material_override = ExtResource("5_8gtqb")
-shader_uniforms/Color = Color(0.658824, 0.235294, 0.509804, 1)
+instance_shader_parameters/Color = Color(0.658824, 0.235294, 0.509804, 1)
 mesh = ExtResource("5_x5n2u")
 skeleton = NodePath("../../../..")
 surface_material_override/0 = ExtResource("5_8gtqb")
@@ -607,7 +607,7 @@ shape = SubResource("SphereShape3D_b4a2y")
 transform = Transform3D(2.006, 0, 0, 0, 2.006, 3.57628e-07, 0, -3.57628e-07, 2.006, -0.0260439, 0.479013, -0.0865947)
 visible = false
 material_override = ExtResource("17_ds1h7")
-shader_uniforms/ColorParameter = Color(0.878431, 0.839216, 0.494118, 1)
+instance_shader_parameters/ColorParameter = Color(0.878431, 0.839216, 0.494118, 1)
 texture = ExtResource("18_0t5bj")
 region_enabled = true
 region_rect = Rect2(128, 0, 32, 32)
